@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital do Olho Magé - Gerador de Mensagens</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e0f7fa 0%, #bbdefb 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-decoration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #25D366, #128C7E, #075E54);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .logo i {
+            font-size: 32px;
+            color: #075E54;
+        }
+        
+        h1 {
+            color: #075E54;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #128C7E;
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-section {
+            background-color: #f9f9f9;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-title {
+            color: #075E54;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #25D366;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #075E54;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: #25D366;
+            outline: none;
+        }
+        
+        .btn-generate {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px auto;
+            width: 100%;
+        }
+        
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+        
+        .messages-section {
+            display: none;
+            margin-top: 30px;
+        }
+        
+        .section-title {
+            color: #075E54;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #25D366;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .message-box {
+            background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+            border-left: 5px solid #25D366;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+        
+        .message-box:hover {
+            transform: translateY(-3px);
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .message-title {
+            font-weight: 700;
+            color: #075E54;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .message-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-copy, .btn-whatsapp {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+        
+        .btn-copy {
+            background-color: #546e7a;
+            color: white;
+            border: none;
+        }
+        
+        .btn-copy:hover {
+            background-color: #455a64;
+        }
+        
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-whatsapp:hover {
+            background-color: #128C7E;
+        }
+        
+        .message-content {
+            white-space: pre-line;
+            line-height: 1.6;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            font-size: 16px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .copy-notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background-color: #25D366;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+            animation: fadeIn 0.3s, fadeOut 0.3s 2s forwards;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            font-size: 14px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .instructions {
+            background-color: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .instructions h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        .phone-format {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            
+            .message-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .message-actions {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-decoration"></div>
+        
+        <header>
+            <div class="logo">
+                <i class="fas fa-eye"></i>
+                <h1>Hospital do Olho Magé</h1>
+                <i class="fab fa-whatsapp"></i>
+            </div>
+            <p class="subtitle">Gerador de Mensagens para WhatsApp</p>
+        </header>
+        
+        <section class="form-section">
+            <h2 class="form-title"><i class="fas fa-user-injured"></i> Informações do Paciente</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nome"><i class="fas fa-signature"></i> Nome do Paciente:</label>
+                    <input type="text" id="nome" placeholder="Digite o nome completo do paciente">
+                </div>
+                
+                <div class="form-group">
+                    <label for="telefone"><i class="fas fa-phone"></i> Número do WhatsApp:</label>
+                    <input type="text" id="telefone" placeholder="Ex: 21999999999 (apenas números)">
+                    <div class="phone-format">Digite apenas números, sem parênteses, espaços ou traço</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="data"><i class="far fa-calendar-alt"></i> Data da Consulta:</label>
+                    <input type="text" id="data" placeholder="Ex: 15/09/2025">
+                </div>
+                
+                <div class="form-group">
+                    <label for="hora"><i class="far fa-clock"></i> Horário da Consulta:</label>
+                    <input type="text" id="hora" placeholder="Ex: 14h">
+                </div>
+            </div>
+            
+            <button id="gerar-btn" class="btn-generate">
+                <i class="fas fa-comment-medical"></i> Gerar Mensagens
+            </button>
+        </section>
+        
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> Como usar:</h3>
+            <ol>
+                <li>Preencha todos os campos acima com as informações do paciente</li>
+                <li>Clique em "Gerar Mensagens" para criar as mensagens personalizadas</li>
+                <li>Use o botão "Copiar Mensagem" para copiar o texto e colar no WhatsApp</li>
+                <li>Ou clique em "Abrir no WhatsApp" para abrir diretamente o aplicativo com a mensagem pronta</li>
+            </ol>
+        </div>
+        
+        <section class="messages-section" id="messages-section">
+            <h2 class="section-title"><i class="fas fa-comments"></i> Mensagens Personalizadas</h2>
+            <p>Selecione e copie a mensagem desejada para colar no WhatsApp:</p>
+            
+            <div class="message-box">
+                <div class="message-header">
+                    <div class="message-title"><i class="fas fa-1"></i> Modelo 1 (Mais Direto e Pessoal)</div>
+                    <div class="message-actions">
+                        <button class="btn-copy" data-target="msg1">
+                            <i class="far fa-copy"></i> Copiar Mensagem
+                        </button>
+                        <a id="whatsapp1" class="btn-whatsapp" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Abrir no WhatsApp
+                        </a>
+                    </div>
+                </div>
+                <div class="message-content" id="msg1"></div>
+            </div>
+            
+            <div class="message-box">
+                <div class="message-header">
+                    <div class="message-title"><i class="fas fa-2"></i> Modelo 2 (Mais Detalhado e Educado)</div>
+                    <div class="message-actions">
+                        <button class="btn-copy" data-target="msg2">
+                            <i class="far fa-copy"></i> Copiar Mensagem
+                        </button>
+                        <a id="whatsapp2" class="btn-whatsapp" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Abrir no WhatsApp
+                        </a>
+                    </div>
+                </div>
+                <div class="message-content" id="msg2"></div>
+            </div>
+            
+            <div class="message-box">
+                <div class="message-header">
+                    <div class="message-title"><i class="fas fa-3"></i> Modelo 3 (Mais Conversacional)</div>
+                    <div class="message-actions">
+                        <button class="btn-copy" data-target="msg3">
+                            <i class="far fa-copy"></i> Copiar Mensagem
+                        </button>
+                        <a id="whatsapp3" class="btn-whatsapp" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Abrir no WhatsApp
+                        </a>
+                    </div>
+                </div>
+                <div class="message-content" id="msg3"></div>
+            </div>
+        </section>
+        
+        <div class="copy-notification" id="copy-notification">
+            <i class="fas fa-check-circle"></i> Mensagem copiada com sucesso!
+        </div>
+        
+        <footer>
+            <p>Hospital do Olho Magé - Gerador de Mensagens para WhatsApp</p>
+            <p>© 2025 - Todos os direitos reservados</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const gerarBtn = document.getElementById('gerar-btn');
+            const messagesSection = document.getElementById('messages-section');
+            const copyNotification = document.getElementById('copy-notification');
+            
+            // Gerar mensagens quando o botão for clicado
+            gerarBtn.addEventListener('click', function() {
+                const nome = document.getElementById('nome').value.trim();
+                const telefone = document.getElementById('telefone').value.trim();
+                const data = document.getElementById('data').value.trim();
+                const hora = document.getElementById('hora').value.trim();
+                
+                if (!nome || !telefone || !data || !hora) {
+                    alert('Por favor, preencha todas as informações!');
+                    return;
+                }
+                
+                // Limpar caracteres não numéricos do telefone
+                const numeroLimpo = telefone.replace(/\D/g, '');
+                
+                // Adicionar código do país (55 para Brasil) se necessário
+                let numeroWhatsApp = numeroLimpo;
+                if (!numeroWhatsApp.startsWith('55') && numeroWhatsApp.length >= 10) {
+                    numeroWhatsApp = '55' + numeroWhatsApp;
+                }
+                
+                // Gerar as três mensagens
+                const msg1 = `_Olá, *${nome}*! Tudo bem?_  \nAqui é do _*Hospital do Olho Magé*_ 👁️. Confirmamos com sucesso o agendamento da sua _*consulta para o dia ${data} às ${hora}*_.\n\n_Alguns lembretes importantes para o seu dia:_  \n⚠️ _É importante vir *acompanhado(a)*, pois a dilatação dos olhos pode dificultar a visão por algumas horas após o exame._  \n✅ _Não se esqueça de trazer *cópias dos documentos*: RG, CPF, Cartão do SUS e um comprovante de residência recente de Magé._\n\n_Por favor, *confirme se conseguirá comparecer* respondendo esta mensagem._  \nAgradecemos pela atenção e te aguardamos! _Tenha um excelente dia!_ ✨`;
+                
+                const msg2 = `_Prezado(a) Sr(a). *${nome}*, bom dia/tarde!_  \nAgradecemos por confiar no _*Hospital do Olho Magé*_ 👁️. Sua _*consulta está agendada para ${data}, às ${hora}*_.\n\n_Gostaríamos de reforçar algumas orientações para seu atendimento:_  \n1️⃣ _*Acompanhante:*_ Recomendamos que venha _*acompanhado(a)*_, devido aos possíveis efeitos temporários da dilatação ocular.  \n2️⃣ _*Documentação:*_ Solicitamos a apresentação de _*cópias de*_: Identidade (RG), CPF, Cartão do SUS e comprovante de residência atualizado do município de Magé.\n\n_É fundamental que *confirme sua presença* respondendo esta mensagem._  \nFicamos à disposição para qualquer dúvida. _Desejamos um ótimo dia!_ 👁️`;
+                
+                const msg3 = `_Oi, *${nome}*! Aqui é do _*Hospital do Olho Magé*_ 😊_  \n_Seu agendamento foi concluído! Sua consulta será no dia _*${data} às ${hora}*_.\n\n_Só alguns recadinhos importantes:_  \n•   _Se possível, *venha com uma companhia*, porque depois de dilatar a pupila a visão fica um pouco embaçada por um tempinho._  \n•   _*Não esquece de trazer cópia dos documentos*: RG, CPF, Cartão do SUS e comprovante de endereço de Magé._\n\n_Pode confirmar se está tudo certo pra esse dia?_ É só responder aqui!  \n_Obrigada e até breve!_ ✨`;
+                
+                // Preencher as mensagens na página
+                document.getElementById('msg1').textContent = msg1;
+                document.getElementById('msg2').textContent = msg2;
+                document.getElementById('msg3').textContent = msg3;
+                
+                // Configurar links do WhatsApp
+                document.getElementById('whatsapp1').href = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msg1)}`;
+                document.getElementById('whatsapp2').href = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msg2)}`;
+                document.getElementById('whatsapp3').href = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msg3)}`;
+                
+                // Mostrar a seção de mensagens
+                messagesSection.style.display = 'block';
+                
+                // Scroll para a seção de mensagens
+                messagesSection.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Adicionar event listeners para os botões de copiar
+            document.querySelectorAll('.btn-copy').forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const textToCopy = document.getElementById(targetId).textContent;
+                    
+                    // Usar a API de Clipboard para copiar o texto
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        // Mostrar notificação de cópia bem-sucedida
+                        copyNotification.style.display = 'flex';
+                        setTimeout(() => {
+                            copyNotification.style.display = 'none';
+                        }, 2500);
+                    }).catch(err => {
+                        console.error('Erro ao copiar texto: ', err);
+                        alert('Não foi possível copiar o texto. Tente novamente.');
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
